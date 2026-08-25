@@ -6,17 +6,20 @@ class GPAY{
         string name;
         long long phoneno;
         double balance;
+        int pin;
     
     public:
         GPAY(){                     //default constructor
             name="";
             phoneno=0;
             balance=0;
+            pin=0;
         }
-        GPAY(string n, long long ph, double b){    // parameterized constructor
+        GPAY(string n, long long ph, double b, int p){    // parameterized constructor
             name=n;
             phoneno=ph;
             balance=b;
+            pin=p;
             cout<<"User "<<name<<" Created "<<endl;
         }
         //Getters
@@ -29,6 +32,9 @@ class GPAY{
         double getBalance(){
             return balance;
         }
+        int getpin(){
+            return pin;
+        }
 
         //Setters
         void setname(string n){
@@ -40,12 +46,18 @@ class GPAY{
         void setbalance(double b){
             balance=b;
         }
+        void setpin(int p){
+            pin=p;
+        }
 
         void addmoney(double amount){       //uses for adding money
             balance+=amount;
             cout<<amount<<" added to "<<name<<"'s account."<<endl;
         }
 
+        bool Pin(int enteredpin){
+            return pin==enteredpin;
+        }
         void pay(GPAY &receiver,double amount){     //Uses for payments
             if(balance>=amount){
                 balance-=amount;
@@ -77,6 +89,7 @@ int main(){
         string name;
         long long phoneno;
         double balance;
+        int pin;
 
         cout<<"Enter the User name "<<i+1<<" : ";
         getline(cin,name);
@@ -87,12 +100,16 @@ int main(){
         cout<<"Enter balance: ";
         cin>>balance;
 
+        cout<<"Enter pin: ";
+        cin>>pin;
+
         cin.ignore();
 
         //usinng setters 
         p[i].setname(name);
         p[i].setphone(phoneno);
         p[i].setbalance(balance);
+        p[i].setpin(pin);
     }
 
     //display all the users
@@ -139,16 +156,21 @@ int main(){
             cout<<"Receiver phone no not found."<<endl;
         }
         else{
-            p[ma].pay(p[b],amount);
-            //showing the updated user details
-            cout<<"\n\n---Updated User Details---\n\n";
-            if(ma != -1 && b != -1) {
+            int enteredPin;
+            cout << "Enter UPI PIN for " << p[ma].getName() << ": ";
+            cin >> enteredPin;
+            if (p[ma].Pin(enteredPin)) {
+                p[ma].pay(p[b], amount);
+                //showing the updated user details
+                cout<<"\n\n---Updated User Details---\n\n";
+                if(ma != -1 && b != -1) {
 
-                cout << "--- Sender Details ---\n";
-                p[ma].display();
+                    cout << "--- Sender Details ---\n";
+                        p[ma].display();
 
-                cout << "--- Receiver Details ---\n";
-                p[b].display();
+                    cout << "--- Receiver Details ---\n";
+                    p[b].display();
+                }
             }
         }
     }
